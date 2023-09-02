@@ -33,4 +33,13 @@ public class Medic {
  private Specialicity specialicity;
  @Embedded
  private Address address;
+
+ public Medic(DataRegisterMedic dataRegisterMedic) {
+  this.name = dataRegisterMedic.name();
+  this.email = dataRegisterMedic.email();
+  this.document = dataRegisterMedic.document();
+  this.specialicity = dataRegisterMedic.specialicity();
+  this.address = new Address(dataRegisterMedic.address());
+ }
+
 }
