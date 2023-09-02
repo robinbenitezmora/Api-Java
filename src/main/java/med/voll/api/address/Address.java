@@ -16,4 +16,12 @@ public class Address {
  private String compliment;
  private String distrit;
  private String city;
+
+ public Address(DataAddress address) {
+  this.street = address.street();
+  this.number = address.number();
+  this.compliment = address.compliment();
+  this.distrit = address.distrit();
+  this.city = address.city();
+ }
 }
