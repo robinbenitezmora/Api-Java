@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/medics")
 public class MedicController {
@@ -18,7 +20,7 @@ public class MedicController {
  private MedicRepository medicRepository;
 
  @PostMapping
- public void registerMedic(@RequestBody DataRegisterMedic dataRegisterMedic) {
+ public void registerMedic(@RequestBody @Valid DataRegisterMedic dataRegisterMedic) {
   medicRepository.save(new Medic(dataRegisterMedic));
  }
 }

@@ -1,5 +1,11 @@
 package med.voll.api.address;
 
-public record DataAddress(String street, String distrit, String city, String number, String compliment) {
+import jakarta.validation.constraints.NotBlank;
 
+public record DataAddress(
+  @NotBlank String street,
+  @NotBlank String distrit,
+  @NotBlank String city,
+  @NotBlank String number,
+  @NotBlank String compliment) {
 }
