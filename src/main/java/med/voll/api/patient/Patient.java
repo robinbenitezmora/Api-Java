@@ -8,11 +8,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.address.Address;
+import med.voll.api.controller.DataRegisterPatient;
 
 @Getter
 @EqualsAndHashCode(of = "id")
@@ -34,7 +36,7 @@ public class Patient {
  @Embedded
  private Address address;
 
- public Patient(DataRegiterPatient data) {
+ public Patient(@Valid DataRegisterPatient data) {
   this.name = data.name();
   this.email = data.email();
   this.phone = data.phone();
