@@ -1,7 +1,5 @@
 package med.voll.api.patient;
 
-import jakarta.annotation.Generated;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +12,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.address.Address;
-import med.voll.api.controller.DataRegisterPatient;
 
 @Getter
 @EqualsAndHashCode(of = "id")
