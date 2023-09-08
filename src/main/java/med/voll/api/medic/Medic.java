@@ -1,6 +1,5 @@
 package med.voll.api.medic;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
