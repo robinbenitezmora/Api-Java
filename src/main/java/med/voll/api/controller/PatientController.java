@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import med.voll.api.patient.DataRegisterPatient;
 import med.voll.api.patient.Patient;
 import med.voll.api.patient.PatientRepository;
 
