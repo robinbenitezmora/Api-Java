@@ -2,6 +2,7 @@ package med.voll.api.controller;
 
 import med.voll.api.medic.DataMedicList;
 import med.voll.api.medic.DataRegisterMedic;
+import med.voll.api.medic.DataUpdateMedic;
 import med.voll.api.medic.Medic;
 import med.voll.api.medic.MedicRepository;
 
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
@@ -37,7 +40,10 @@ public class MedicController {
  }
 
  @PutMapping
- public void updateMedic() {
-
+ @Transactional
+ public void updateMedic(@RequestBody @Valid DataUpdateMedic dataUpdateMedic) {
+  Medic medic = medicRepository.getReferenceById(dataUpdateMedic.id());
+  medic.updateData(dataUpdateMedic);
+  medicRepository.save(medic);
  }
 }
