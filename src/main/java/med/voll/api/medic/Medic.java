@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import med.voll.api.address.Address;
 
 @Table(name = "medics")
-@Entity(name = "medic")
+@Entity(name = "Medic")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
