@@ -35,4 +35,9 @@ public class MedicController {
  public Page<DataMedicList> listMedics(@PageableDefault(size = 2) Pageable pageable) {
   return medicRepository.findAll(pageable).map(DataMedicList::new);
  }
+
+ @PutMapping
+ public void updateMedic() {
+
+ }
 }
