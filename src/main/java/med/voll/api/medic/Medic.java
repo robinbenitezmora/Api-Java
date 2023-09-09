@@ -43,4 +43,20 @@ public class Medic {
   this.address = new Address(dataRegisterMedic.address());
  }
 
+ public void updateData(DataUpdateMedic dataUpdateMedic) {
+  if (dataUpdateMedic.name() != null) {
+   this.name = dataUpdateMedic.name();
+  }
+  if (dataUpdateMedic.document() != null) {
+   this.document = dataUpdateMedic.document();
+  }
+  if (dataUpdateMedic.address() != null) {
+   this.address = address.updateData(dataUpdateMedic.address());
+  }
+
+  this.name = dataUpdateMedic.name();
+  this.document = dataUpdateMedic.document();
+  this.address = address.updateData(dataUpdateMedic.address());
+ }
+
 }
