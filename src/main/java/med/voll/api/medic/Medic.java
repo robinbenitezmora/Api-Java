@@ -29,12 +29,14 @@ public class Medic {
  private String email;
  private String phone;
  private String document;
+ private boolean active;
  @Enumerated(EnumType.STRING)
  private Specialicity specialicity;
  @Embedded
  private Address address;
 
  public Medic(DataRegisterMedic dataRegisterMedic) {
+  this.active = true;
   this.name = dataRegisterMedic.name();
   this.email = dataRegisterMedic.email();
   this.phone = dataRegisterMedic.phone();
@@ -57,6 +59,10 @@ public class Medic {
   this.name = dataUpdateMedic.name();
   this.document = dataUpdateMedic.document();
   this.address = address.updateData(dataUpdateMedic.address());
+ }
+
+ public void unactiveMedic() {
+  this.active = false;
  }
 
 }

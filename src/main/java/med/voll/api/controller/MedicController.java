@@ -38,7 +38,7 @@ public class MedicController {
 
  @GetMapping
  public Page<DataMedicList> listMedics(@PageableDefault(size = 2) Pageable pageable) {
-  return medicRepository.findAll(pageable).map(DataMedicList::new);
+  return medicRepository.findByActiveTrue(pageable).map(DataMedicList::new);
  }
 
  @PutMapping
@@ -53,6 +53,12 @@ public class MedicController {
  @Transactional
  public void deleteMedic(@PathVariable Long id) {
   Medic medic = medicRepository.getReferenceById(id);
-  medicRepository.delete(medic);
+  medic.unactiveMedic();
  }
+
+ // DELETE in Database
+ // public void deleteMedic(Medic medic) {
+ // Medic medic = medicRepository.getReferenceById(id);
+ // medic.deleteMedic(medic);
+ // }
 }
