@@ -2,9 +2,12 @@ package med.voll.api.controller;
 
 import med.voll.api.medic.DataMedicList;
 import med.voll.api.medic.DataRegisterMedic;
+import med.voll.api.medic.DataResponseMedic;
 import med.voll.api.medic.DataUpdateMedic;
 import med.voll.api.medic.Medic;
 import med.voll.api.medic.MedicRepository;
+
+import javax.xml.crypto.Data;
 
 import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,10 @@ import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.P
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,14 +42,32 @@ public class MedicController {
 
  @GetMapping
  public Page<DataMedicList> listMedics(@PageableDefault(size = 2) Pageable pageable) {
-  return medicRepository.findAll(pageable).map(DataMedicList::new);
+  return medicRepository.findByActiveTrue(pageable).map(DataMedicList::new);
  }
 
  @PutMapping
  @Transactional
- public void updateMedic(@RequestBody @Valid DataUpdateMedic dataUpdateMedic) {
+ public ResponseEntity updateMedic(@RequestBody @Valid DataUpdateMedic dataUpdateMedic) {
   Medic medic = medicRepository.getReferenceById(dataUpdateMedic.id());
   medic.updateData(dataUpdateMedic);
-  medicRepository.save(medic);
+  return ResponseEntity.ok(new DataResponseMedic());
+  return ResponseEntitiy.ok(new DataResponseMedic(medic.getId(), medic.getName(), medic.getEmail(),
+    medic.getPhone(), medic.Specialicity.toString(), new DataAddress(medic.getAddress.getStreet(),
+      medic.getAddress().getDistrit(), medic.getAddress().getCity(), medic.getAddress().getNumber(),
+      medic.getAddress().getComplement())));
+ };
+
+ @DeleteMapping("/{id}")
+ @Transactional
+ public ResponseEntity deleteMedic(@PathVariable Long id) {
+  Medic medic = medicRepository.getReferenceById(id);
+  medic.unactiveMedic();
+  return ResponseEntity.ok().build();
  }
+
+ // DELETE in Database
+ // public void deleteMedic(Medic medic) {
+ // Medic medic = medicRepository.getReferenceById(id);
+ // medic.deleteMedic(medic);
+ // }
 }
