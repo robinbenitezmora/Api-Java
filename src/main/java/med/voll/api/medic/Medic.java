@@ -29,6 +29,7 @@ public class Medic {
  private String email;
  private String phone;
  private String document;
+
  private boolean active;
  @Enumerated(EnumType.STRING)
  private Specialicity specialicity;
@@ -55,10 +56,6 @@ public class Medic {
   if (dataUpdateMedic.address() != null) {
    this.address = address.updateData(dataUpdateMedic.address());
   }
-
-  this.name = dataUpdateMedic.name();
-  this.document = dataUpdateMedic.document();
-  this.address = address.updateData(dataUpdateMedic.address());
  }
 
  public void unactiveMedic() {
