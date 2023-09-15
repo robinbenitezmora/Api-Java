@@ -1,12 +1,13 @@
 package med.voll.api.controller;
 
-import med.voll.api.address.DataAddress;
-import med.voll.api.medic.DataMedicList;
-import med.voll.api.medic.DataRegisterMedic;
-import med.voll.api.medic.DataResponseMedic;
-import med.voll.api.medic.DataUpdateMedic;
-import med.voll.api.medic.Medic;
-import med.voll.api.medic.MedicRepository;
+import med.voll.api.domain.address.DataAddress;
+import med.voll.api.domain.medic.DataMedicList;
+import med.voll.api.domain.medic.DataRegisterMedic;
+import med.voll.api.domain.medic.DataResponseMedic;
+import med.voll.api.domain.medic.DataUpdateMedic;
+import med.voll.api.domain.medic.Medic;
+import med.voll.api.domain.medic.MedicRepository;
+
 import org.apache.coyote.Response;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -67,7 +68,7 @@ public class MedicController {
     return ResponseEntity.ok(new DataResponseMedic(medic.getId(), medic.getName(), medic.getEmail(),
         medic.getPhone(), medic.getSpecialicity().toString(), new DataAddress(medic.getAddress().getStreet(),
             medic.getAddress().getDistrit(), medic.getAddress().getCity(), medic.getAddress().getNumber(),
-            medic.getAddress().getComplement())));
+            medic.getAddress().getCompliment())));
   }
 
   @DeleteMapping("/{id}")
@@ -90,7 +91,7 @@ public class MedicController {
     var dataMedic = new DataResponseMedic(medic.getId(), medic.getName(), medic.getEmail(), medic.getPhone(),
         medic.getSpecialicity().toString(), new DataAddress(medic.getAddress().getStreet(),
             medic.getAddress().getDistrit(), medic.getAddress().getCity(), medic.getAddress().getNumber(),
-            medic.getAddress().getComplement()));
+            medic.getAddress().getCompliment()));
     return ResponseEntity.ok(dataMedic);
   }
 }
