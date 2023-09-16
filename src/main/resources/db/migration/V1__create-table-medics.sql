@@ -1,4 +1,3 @@
-
 create table medics
 (
  id bigint not null primary key,
@@ -11,4 +10,4 @@ create table medics
  compliment varchar(255),
  number varchar(255),
  city varchar(255) not null
-);
+)
