@@ -1,23 +1,25 @@
 package med.voll.api.controller;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/login")
 
 public class AuthenticationController {
- @PostMapping
- public ResponseEntity authenticate(DataAuthenticateUser dataAuthenticateUser) {
-  Object dataAuthenticatiionUser;
-  UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-    ((Object) dataAuthenticatiionUser).login(), dataAuthenticateUser.password());
-  AuthenticationController authenticationManager;
-  authenticationManager.authenticate(token);
-  return ResponseEntity.ok().build();
- }
+  @Autowired
+  private AuthenticationManager authenticationManager;
+
+  @PostMapping
+  public ResponseEntity authenticateUser(@RequestBody @Valid DataAuthenticationUser dataAuthenticationUser) {
+    Authentication token = new UsernamePasswordAuthenticationToken(dataAuthenticationUser.login(),
+        dataAuthenticationUser.password());
+    authenticationManager.authenticate(token);
+    return ResponseEntity.ok().build();
+  }
 }
