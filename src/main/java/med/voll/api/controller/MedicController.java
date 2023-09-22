@@ -14,8 +14,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
-import javax.xml.crypto.Data;
-
 @RestController
 @RequestMapping("/medics")
 public class MedicController {
