@@ -30,7 +30,7 @@ public class Medic {
  private String phone;
  private String document;
 
- private boolean active;
+ private Boolean active;
  @Enumerated(EnumType.STRING)
  private Specialicity specialicity;
  @Embedded
