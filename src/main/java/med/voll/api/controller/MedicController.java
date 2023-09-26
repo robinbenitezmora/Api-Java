@@ -42,7 +42,7 @@ public class MedicController {
 
   @PutMapping
   @Transactional
-  public ResponseEntity updateMedic(@RequestBody @Valid DataUpdateMedic dataUpdateMedic) {
+  public ResponseEntity<DataResponseMedic> updateMedic(@RequestBody @Valid DataUpdateMedic dataUpdateMedic) {
     Medic medic = medicRepository.getReferenceById(dataUpdateMedic.id());
     medic.updateData(dataUpdateMedic);
     return ResponseEntity.ok(new DataResponseMedic(medic.getId(), medic.getName(), medic.getEmail(),
@@ -53,7 +53,7 @@ public class MedicController {
 
   @DeleteMapping("/{id}")
   @Transactional
-  public ResponseEntity deleteMedic(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteMedic(@PathVariable Long id) {
     Medic medic = medicRepository.getReferenceById(id);
     medic.unactiveMedic();
     return ResponseEntity.noContent().build();
