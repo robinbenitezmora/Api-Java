@@ -8,4 +8,8 @@ public class TokenService {
   return null;
  }
 
+ public Object getSubject(String token) {
+  return null;
+ }
+
 }

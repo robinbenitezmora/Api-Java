@@ -1,103 +1,42 @@
 package med.voll.api.infra.security;
 
-import java.security.Security;
-
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import med.voll.api.domain.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.DefaultSecurityFilterChain;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
 
-@Configuration
-@EnableWebSecurity
-public class SecurityConfigurations {
+@Component
+public class SecurityConfigurations extends OncePerRequestFilter {
 
-    @Autowired
-    private SecurityFilter securityFilter;
+  @Autowired
+  private TokenService tokenService;
 
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+  @Autowired
+  private UserRepository userRepository;
 
-import static org.springframework.http.HttpMethod.POST;
-
-import org.springframework.security.web.SecurityFilterChain;
-
-@Configuration
-    @EnableWebSecurity
-    public class SecurityConfigurations {
-
-        @Autowired
-        private SecurityFilter securityFilter;
-
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
-
-import static org.springframework.http.HttpMethod.POST;
-
-public class SecurityConfigurations {
-  private static class SessionCreationPolicyConfigurer
-      extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
-    private final SessionCreationPolicy sessionCreationPolicy;
-
-    public SessionCreationPolicyConfigurer(SessionCreationPolicy sessionCreationPolicy) {
-      this.sessionCreationPolicy = sessionCreationPolicy;
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+    // Obtener el token del header
+    var authHeader = request.getHeader("Authorization");
+    if (authHeader != null) {
+      var token = authHeader.replace("Bearer ", "");
+      var userName = tokenService.getSubject(token); // extract username
+      if (userName != null) {
+        // Token valido
+        var user = userRepository.findByLogin(userName);
+        var authentication = new UsernamePasswordAuthenticationToken(user, null,
+            user.getAuthorities()); // Forzamos un inicio de sesion
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+      }
     }
-
-    @Override
-    public void configure(HttpSecurity http) {
-      http.sessionManagement().sessionCreationPolicy(sessionCreationPolicy);
-    }
+    filterChain.doFilter(request, response);
   }
-
-  private SessionCreationPolicyConfigurer sessionCreationPolicy(SessionCreationPolicy stateless) {
-    return new SessionCreationPolicyConfigurer(stateless);
-  }
-
-  }
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
-
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-      throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
-  }
-
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-    return httpSecurity.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-        .sessionManagement(
-            sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeRequests(authorizeRequests -> authorizeRequests
-            .antMatchers(HttpMethod.POST, "/login").permitAll()
-            .anyRequest().authenticated())
-        .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-        .build();
-  }
-
-  @Bean
-  public SecurityFilterChain securityFilterChain(WebSecurity webSecurity) throws Exception {
-    return webSecurity
-        .ignoring()
-        .antMatchers(POST, "/login")
-        .and()
-        .build();
-  }
-
 }
