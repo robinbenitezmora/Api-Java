@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import med.voll.api.domain.users.DataAuthenticationUser;
 import med.voll.api.domain.users.User;
 import med.voll.api.infra.security.DataJWTToken;
+import med.voll.api.infra.security.TokenService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +29,8 @@ public class AuthenticationController {
     Authentication autoToken = new UsernamePasswordAuthenticationToken(dataAuthenticationUser.login(),
         dataAuthenticationUser.password());
     var userAuthenticated = authenticationManager.authenticate(autoToken);
-    var JWTtoken = med.voll.api.infra.security.TokenService.generateToken((User) userAuthenticated.getPrincipal());
+    var tokenService = new TokenService();
+    var JWTtoken = tokenService.generateToken((User) userAuthenticated.getPrincipal());
     return ResponseEntity.ok(new DataJWTToken((String) JWTtoken));
   }
 }

@@ -20,7 +20,7 @@ public class TokenService {
  @Value("${api.security.secret}")
  private String apiSecret;
 
- public String generarToken(User user) {
+ public String generateToken(User user) {
   try {
    Algorithm algorithm = Algorithm.HMAC256(apiSecret);
    Date expirationDate = (Date) Date.from(generarFechaExpiracion());
