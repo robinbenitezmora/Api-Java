@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
+@Tag(name = "Authentication", description = "Authentication of users")
 
 public class AuthenticationController {
   @Autowired
   private AuthenticationManager authenticationManager;
+
+  @Autowired
+  private TokenService tokenService;
 
   @PostMapping
   public ResponseEntity<DataJWTToken> authenticateUser(
@@ -29,7 +33,6 @@ public class AuthenticationController {
     Authentication autoToken = new UsernamePasswordAuthenticationToken(dataAuthenticationUser.login(),
         dataAuthenticationUser.password());
     var userAuthenticated = authenticationManager.authenticate(autoToken);
-    var tokenService = new TokenService();
     var JWTtoken = tokenService.generateToken((User) userAuthenticated.getPrincipal());
     return ResponseEntity.ok(new DataJWTToken((String) JWTtoken));
   }
